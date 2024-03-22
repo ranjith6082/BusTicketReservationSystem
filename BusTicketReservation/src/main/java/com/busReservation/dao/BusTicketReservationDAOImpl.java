@@ -191,5 +191,35 @@ public class BusTicketReservationDAOImpl implements BusTicketReservationDao {
 	 }
 	 
 	 
+	//--------------------------DISPLAYING BOOKING ID DETAILS-----------------------------//
+	@Override
+	public List<BookingInfo> getBookingById(int bookingId) {
+	    try (Session session = sf.openSession()) {
+	        Query<BookingInfo> query = session.createQuery("FROM BookingInfo WHERE bookingId = :bookingId", BookingInfo.class);
+	        query.setParameter("bookingId", bookingId);
+	        return query.list();
+	    } catch (Exception e) {
+	        System.out.println(e);
+	    }
+	    return null;
+	}
+	
+	
+	
+	
+	//--------------------------DISPLAYING VIEW ALL BOOKING-----------------------------//
+		 @Override
+		 public List<BookingInfo> viewAllBooking(){
+			 try (Session session = sf.openSession()) {
+		            Query<BookingInfo> query = session.createQuery("FROM BookingInfo", BookingInfo.class);
+		            return query.list();
+		        }
+			 catch(Exception e) {
+				 System.out.println(e);
+			 }
+			return null;
+		 }
+	 
+	 
 	 
 }

@@ -73,6 +73,11 @@ public class BookingInfo {
 	public int getBookingId() {
 		return bookingId;
 	}
+
+	public BookingInfo() {
+	}
+	
+	
 	
 	
 	

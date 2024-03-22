@@ -32,6 +32,8 @@ public interface BusTicketReservationDao {
 	
 	public void deleteBus(BusInfo busInfo);
 
+	List<BookingInfo> viewAllBooking();
+
 	
 		
 

@@ -3,6 +3,9 @@ package com.busReservation;
 import java.util.List;
 import java.util.Scanner;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import com.busReservation.dao.BusTicketReservationDAOImpl;
 import com.busReservation.dao.BusTicketReservationDao;
 import com.busReservation.entity.*;
@@ -26,6 +29,7 @@ public class AppController {
 	
 	//--------------------------CREATING NEW USER-----------------------------//
 	public void newUser() {
+		
 		System.out.println("\n========\nNew User \n========");
 		System.out.print("Enter User name : ");
 		String userName = sc.next();
@@ -35,7 +39,7 @@ public class AppController {
 		String u_password = sc.next();
 		 
 		User user = new User(userName,email,u_password);
-		 
+		
 		bus.addUser(user);
 		
 		System.out.println("\nWelcome "+userName+"....:)");
@@ -61,6 +65,7 @@ public class AppController {
 		System.out.println("\n=================\nENTER BUS DETAILS \n=================");
 		System.out.print("Enter Bus Name : ");
 		String busName = sc.next();
+		sc.nextLine();
 		System.out.print("Enter Starting Point : ");
 		String startPoint = sc.next();
 		System.out.print("Enter Destination : ");
@@ -69,6 +74,7 @@ public class AppController {
 		int capacity = sc.nextInt();
 		System.out.print("Enter Journey Date (DD/MM/YYYY) : ");
 		String date = sc.next();
+		sc.nextLine();
 		System.out.print("Enter Driver Name : ");
 		String driverName = sc.next();
 		System.out.print("Enter Driver Phno : ");
@@ -82,43 +88,45 @@ public class AppController {
 	}
 	
 	//--------------------------ADD BOOKING DETAILS-----------------------------//
-	public void newBooking() {
-		System.out.print("\nEnter your registered E-mail : ");
-		String email = sc.next();
-		
-        List<User> users = bus.getByEmail(email);
+		public void newBooking() {
+			System.out.print("\nEnter your registered E-mail : ");
+			String email = sc.next();
+			
+	        List<User> users = bus.getByEmail(email);
 
-        if (!users.isEmpty()) {
-            for (User user : users) {
-            	System.out.println("\n============\nUSER DETAILS \n============");
-                System.out.println("User ID: " + user.getUserId());
-                System.out.println("User Name: " + user.getUserName());
-            }
-        } else {
-            System.out.println("No user found with the provided email.");
-        }  
-	        	
-	            
-		 
-		
-		System.out.print("\n===============\nBOOKING DETAILS \n===============");
-		System.out.print("\nEnter User ID : ");
-		int userId = sc.nextInt();
-		System.out.print("Enter Bus No : ");
-		int busNo = sc.nextInt();
-		System.out.print("Enter Passenger Name : ");
-		String passName = sc.next();
-		System.out.print("Enter Passenger Age : ");
-		int age = sc.nextInt();
-		System.out.print("Enter Passenger Phno : ");
-		String passPhno = sc.next();
-		
-		BookingInfo bookingInfo = new BookingInfo(userId,busNo,passName,age,passPhno);
-		
-		bus.addBooking(bookingInfo);
-		
-		System.out.println("\nBOOKING SUCCESSFUL.....:)");
-	}
+	        if (!users.isEmpty()) {
+	            for (User user : users) {
+	            	System.out.println("\n============\nUSER DETAILS \n============");
+	                System.out.println("User ID: " + user.getUserId());
+	                System.out.println("User Name: " + user.getUserName());
+	            }
+	        } else {
+	            System.out.println("No user found with the provided email.");
+	            return;
+	        }  
+		        	
+		            
+			 
+			
+			System.out.print("\n===============\nBOOKING DETAILS \n===============");
+			System.out.print("\nEnter User ID : ");
+			int userId = sc.nextInt();
+			System.out.print("Enter Bus No : ");
+			int busNo = sc.nextInt();
+			System.out.print("Enter Passenger Name : ");
+			String passName = sc.next();
+			System.out.print("Enter Passenger Age : ");
+			int age = sc.nextInt();
+			System.out.print("Enter Passenger Phno : ");
+			String passPhno = sc.next();
+			
+			BookingInfo bookingInfo = new BookingInfo(userId,busNo,passName,age,passPhno);
+			
+			bus.addBooking(bookingInfo);
+			
+			System.out.println("\nBOOKING SUCCESSFUL.....:)");
+		}
+	
 	
 	//--------------------------UPDATING BUS DETAILS-----------------------------//
 	public void busUpdate() {
@@ -200,4 +208,63 @@ public class AppController {
 	            System.out.println("\nBus not found....!!!");
 	        }
 	}
+	
+	
+	//--------------------------DISPLAYING BOOKING ID DETAILS-----------------------------//
+	public void getBookingId(int bookingId) {
+	    System.out.println("\nBooking Details:");
+
+	    // Fetch the booking details based on the booking ID
+	    List<BookingInfo> bookings = bus.getBookingById(bookingId);
+
+	    if (!bookings.isEmpty()) {
+	        System.out.println(" -------------------------------------------------------------------------------------------------------------------------------------------------------");
+	        String format = "| %-10s | %-10s | %-7s | %-15s | %-7s | %-15s |%n";
+	        System.out.printf(format, "Booking ID", "User ID", "Bus No", "Passenger Name", "Age","Phoneno");
+	        System.out.println(" -------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+	        for (BookingInfo booking : bookings) {
+	            System.out.printf(format,
+	                    booking.getBookingId(),
+	                    booking.getUserId(),
+	                    booking.getBusNo(),
+	                    booking.getPassName(),
+	                    booking.getAge(),
+	            		booking.getPassPhno());
+	            System.out.println(" -------------------------------------------------------------------------------------------------------------------------------------------------------");
+	        }
+	    } else {
+	        System.out.println("\nNo bookings found with the given booking ID....!!!");
+	    }
+	}
+	
+	
+	
+	
+	//--------------------------DISPLAYING VIEW ALL BOOKING-----------------------------//
+		public void getAllBookings() {
+		    System.out.println("\nBooking Details:");
+
+		    // Fetch the booking details based on the booking ID
+		    List<BookingInfo> bookings = bus.viewAllBooking();
+
+		    if (!bookings.isEmpty()) {
+		        System.out.println(" -------------------------------------------------------------------------------------------------------------------------------------------------------");
+		        String format = "| %-10s | %-10s | %-7s | %-15s | %-7s |%n";
+		        System.out.printf(format, "Booking ID", "User ID", "Bus No", "Passenger Name", "Age");
+		        System.out.println(" -------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+		        for (BookingInfo booking : bookings) {
+		            System.out.printf(format,
+		                    booking.getBookingId(),
+		                    booking.getUserId(),
+		                    booking.getBusNo(),
+		                    booking.getPassName(),
+		                    booking.getAge());
+		            System.out.println(" -------------------------------------------------------------------------------------------------------------------------------------------------------");
+		        }
+		    } else {
+		        System.out.println("\nNo bookings found ....!!!");
+		    }
+		}
 }

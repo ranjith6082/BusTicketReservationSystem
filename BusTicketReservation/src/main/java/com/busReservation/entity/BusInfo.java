@@ -8,6 +8,7 @@ public class BusInfo {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
 	@Column(name = "Bus_no")
 	private int busNo;
 	@Column(name = "Bus_name")
@@ -40,51 +41,73 @@ public class BusInfo {
 		this.driverPhno = driverPhno;
 		
 	}
+	
+	
 	public String getBusName() {
 		return busName;
 	}
+
 	public void setBusName(String busName) {
 		this.busName = busName;
 	}
+
 	public String getStartPoint() {
 		return startPoint;
 	}
+
 	public void setStartPoint(String startPoint) {
 		this.startPoint = startPoint;
 	}
+
 	public String getDestination() {
 		return destination;
 	}
+
 	public void setDestination(String destination) {
 		this.destination = destination;
 	}
+
 	public int getCapacity() {
 		return capacity;
 	}
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
+
+	public void setCapacity(int newCapacity) {
+		this.capacity = newCapacity;
 	}
+
 	public String getDate() {
 		return date;
 	}
+
 	public void setDate(String date) {
 		this.date = date;
 	}
+
 	public String getDriverName() {
+		
 		return driverName;
 	}
+
 	public void setDriverName(String driverName) {
 		this.driverName = driverName;
 	}
+
 	public String getDriverPhno() {
 		return driverPhno;
 	}
+
 	public void setDriverPhno(String driverPhno) {
 		this.driverPhno = driverPhno;
 	}
+	
 	public int getBusNo() {
 		return busNo;
+	}
+
+	public BusInfo(int busNo) {
+		this.busNo = busNo;
 	} 
 	
-
+	
+	
 }
